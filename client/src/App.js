@@ -1,5 +1,15 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { addProduct, removeProduct } from './redux/productsSlice';
+import Nav from './components/layout/Nav/Nav';
+// import Main from './components/layout/Main/Main';
+import Footer from './components/layout/Footer/Footer';
+import { Routes, Route } from 'react-router-dom';
+import Home from './components/pages/Home/Home';
+import NotFound from './components/pages/NotFound/NotFound';
+import Cart from './components/pages/Cart/Cart';
+import Products from './components/pages/Products/Products';
+import Login from './components/pages/Login/Login';
+import SingleProduct from './components/pages/SingleProduct/SingleProduct';
 
 function App() {
   const products = useSelector((state) => state.products);
@@ -26,6 +36,16 @@ function App() {
       <div>
         <button onClick={() => dispatch(addProduct())}>add</button>
       </div>
+      <Nav></Nav>
+      <Routes>
+        <Route path='/' element={<Home />}></Route>
+        <Route path='/products' element={<Products />}></Route>
+        <Route path='/products/:id' element={<SingleProduct />}></Route>
+        <Route path='/cart' element={<Cart />}></Route>
+        <Route path='/login' element={<Login />}></Route>
+        <Route path='*' element={<NotFound />}></Route>
+      </Routes>
+      <Footer></Footer>
     </div>
   );
 }
