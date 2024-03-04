@@ -1,5 +1,5 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { addProduct, removeProduct } from './redux/productsSlice';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { addProduct, removeProduct } from './redux/productsSlice';
 import Nav from './components/layout/Nav/Nav';
 // import Main from './components/layout/Main/Main';
 import Footer from './components/layout/Footer/Footer';
@@ -10,14 +10,17 @@ import Cart from './components/pages/Cart/Cart';
 import Products from './components/pages/Products/Products';
 import Login from './components/pages/Login/Login';
 import SingleProduct from './components/pages/SingleProduct/SingleProduct';
+// import { useParams } from 'react-router-dom';
 
 function App() {
-  const products = useSelector((state) => state.products);
-  const dispatch = useDispatch();
+  // const products = useSelector((state) => state.products);
+  // const dispatch = useDispatch();
+
+  // const { productId } = useParams();
 
   return (
     <div>
-      <div>
+      {/* <div>
         {products.map((product) => {
           return (
             <div key={product.id}>
@@ -35,12 +38,12 @@ function App() {
       </div>
       <div>
         <button onClick={() => dispatch(addProduct())}>add</button>
-      </div>
+      </div> */}
       <Nav></Nav>
       <Routes>
         <Route path='/' element={<Home />}></Route>
         <Route path='/products' element={<Products />}></Route>
-        <Route path='/products/:id' element={<SingleProduct />}></Route>
+        <Route path='/products/:productId' element={<SingleProduct />}></Route>
         <Route path='/cart' element={<Cart />}></Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='*' element={<NotFound />}></Route>

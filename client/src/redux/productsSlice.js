@@ -29,8 +29,8 @@ const productsSlice = createSlice({
       state.push({ id: uuidv4(), name: 'xd' });
     },
     editProduct: (state) => {},
-    removeProduct: (state, target) => {
-      return state.filter((product) => product.id !== target.payload);
+    removeProduct: (state, action) => {
+      return state.filter((product) => product.id !== action.payload);
     },
   },
 });
