@@ -1,10 +1,8 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { addProduct } from '../../../redux/productsSlice';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 const Products = () => {
   const products = useSelector((state) => state.products);
-  const dispatch = useDispatch();
 
   return (
     <div>
@@ -21,9 +19,6 @@ const Products = () => {
             </div>
           );
         })}
-        <div>
-          <button onClick={() => dispatch(addProduct())}>add</button>
-        </div>
       </div>
     </div>
   );

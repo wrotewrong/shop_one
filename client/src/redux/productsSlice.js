@@ -25,8 +25,16 @@ const productsSlice = createSlice({
   initialState,
   reducers: {
     getProduct: (state) => {},
-    addProduct: (state) => {
-      state.push({ id: uuidv4(), name: 'xd' });
+    addProduct: (state, action) => {
+      console.log(action.payload);
+      state.push({
+        id: uuidv4(),
+        name: action.payload.name,
+        price: action.payload.price,
+        amount: action.payload.amount,
+        description: action.payload.description,
+        file: action.payload.file,
+      });
     },
     editProduct: (state) => {},
     removeProduct: (state, action) => {

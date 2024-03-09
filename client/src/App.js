@@ -10,6 +10,7 @@ import Cart from './components/pages/Cart/Cart';
 import Products from './components/pages/Products/Products';
 import Login from './components/pages/Login/Login';
 import SingleProduct from './components/pages/SingleProduct/SingleProduct';
+import AddProduct from './components/pages/AddProduct/AddProduct';
 // import { useParams } from 'react-router-dom';
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
         <Route path='/products' element={<Products />}></Route>
         <Route path='/products/:productId' element={<SingleProduct />}></Route>
         <Route path='/cart' element={<Cart />}></Route>
+        <Route path='/add' element={<AddProduct />}></Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='*' element={<NotFound />}></Route>
       </Routes>

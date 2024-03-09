@@ -11,6 +11,9 @@ const Nav = () => {
           <NavLink to={'/products'}>Products</NavLink>
         </li>
         <li>
+          <NavLink to={'/add'}>Add Product</NavLink>
+        </li>
+        <li>
           <NavLink to={'/cart'}>Cart</NavLink>
         </li>
         <li>
