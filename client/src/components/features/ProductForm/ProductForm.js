@@ -21,7 +21,7 @@ const ProductForm = () => {
   return (
     <div>
       ProductForm
-      <Form onSubmit={(e) => submitForm(e)}>
+      <Form onSubmit={(e) => submitForm(e)} encType='multipart/form-data'>
         <Form.Group controlId='formGroupName'>
           <Form.Label>Name</Form.Label>
           <Form.Control
@@ -46,6 +46,7 @@ const ProductForm = () => {
         <Form.Group controlId='formGroupDescription'>
           <Form.Label>Description</Form.Label>
           <Form.Control
+            name='uploaded_file'
             as='textarea'
             onChange={(e) => setDescription(e.target.value)}
           ></Form.Control>
