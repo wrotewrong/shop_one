@@ -17,9 +17,19 @@ const productsSchema = new mongoose.Schema({
     minlength: PRODUCT_NAME_MIN_LENGTH,
     maxlength: PRODUCT_NAME_MAX_LENGTH,
   },
-  price: { type: Number, required: true },
-  amount: { type: Number, required: true },
-  text: {
+  price: {
+    type: Number,
+    required: true,
+    min: PRODUCT_PRICE_MIN,
+    max: PRODUCT_PRICE_MAX,
+  },
+  amount: {
+    type: Number,
+    required: true,
+    min: PRODUCT_AMOUNT_MIN,
+    max: PRODUCT_AMOUNT_MAX,
+  },
+  description: {
     type: String,
     required: true,
     minlength: PRODUCT_DESCRIPTION_MIN_LENGTH,
