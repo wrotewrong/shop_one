@@ -19,6 +19,22 @@ exports.getAll = async (req, res) => {
   }
 };
 
+exports.getById = async (req, res) => {
+  try {
+    const productById = await Products.find({ _id: req.params.id });
+    if (productById.length === 0) {
+      res.status(200).json({ message: 'There is no such product' });
+      console.log(`The product with id: ${req.params.id} does not exist`);
+    } else {
+      res.status(200).json(productById[0]);
+      console.log(productById[0]);
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+    console.log(err.message);
+  }
+};
+
 exports.add = async (req, res) => {
   try {
     const { name, description, price, amount } = req.body;
