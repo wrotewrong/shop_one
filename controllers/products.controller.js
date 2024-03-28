@@ -23,7 +23,7 @@ exports.getById = async (req, res) => {
   try {
     const productById = await Products.find({ _id: req.params.id });
     if (productById.length === 0) {
-      res.status(200).json({ message: 'There is no such product' });
+      res.status(404).json({ message: `Not found...` });
       console.log(`The product with id: ${req.params.id} does not exist`);
     } else {
       res.status(200).json(productById[0]);
@@ -57,6 +57,23 @@ exports.add = async (req, res) => {
     console.log('Product has been added', newProduct);
   } catch (err) {
     if (req.file) removeImage(req.file.filename);
+    res.status(500).json({ message: err.message });
+    console.log(err.message);
+  }
+};
+
+exports.delete = async (req, res) => {
+  try {
+    const product = await Products.findById(req.params.id);
+    if (!product) {
+      res.status(404).json({ message: `Not found...` });
+      console.log(`The product with id: ${req.params.id} does not exist`);
+    } else {
+      await Products.deleteOne({ _id: req.params.id });
+      res.status(200).json({ message: `The product has been removed` });
+      console.log(`The product with id: ${req.params.id} has been removed`);
+    }
+  } catch (err) {
     res.status(500).json({ message: err.message });
     console.log(err.message);
   }
