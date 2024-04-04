@@ -1,7 +1,5 @@
 const Products = require('../models/productsModel');
 const removeImage = require('../utils/removeImage');
-const path = require('path');
-const fs = require('fs');
 
 exports.getAll = async (req, res) => {
   try {
@@ -71,12 +69,7 @@ exports.delete = async (req, res) => {
       res.status(404).json({ message: `Not found...` });
       console.log(`The product with id: ${req.params.id} does not exist`);
     } else {
-      fs.stat(
-        `${path.join(__dirname, '../public/uploads/')}${product.img}`,
-        () => {
-          removeImage(product.img);
-        }
-      );
+      removeImage(product.img);
       await Products.deleteOne({ _id: req.params.id });
       res.status(200).json({ message: `The product has been removed` });
       console.log(`The product with id: ${req.params.id} has been removed`);
