@@ -7,9 +7,14 @@ router.get('/products', productsController.getAll);
 router.get('/products/:id', productsController.getById);
 router.delete('/products/:id', productsController.delete);
 router.post(
-  '/add',
+  '/products',
   uploadImage.single('uploaded_file'),
   productsController.add
+);
+router.put(
+  '/products/:id',
+  uploadImage.single('uploaded_file'),
+  productsController.edit
 );
 
 module.exports = router;

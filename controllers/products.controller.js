@@ -62,6 +62,39 @@ exports.add = async (req, res) => {
   }
 };
 
+exports.edit = async (req, res) => {
+  try {
+    const product = await Products.findById(req.params.id);
+    const { name, price, amount, description } = req.body;
+    const newImg = req.file;
+
+    if (product) {
+      product.name = name || product.name;
+      product.price = price || product.price;
+      product.amount = amount || product.amount;
+      product.description = description || product.description;
+      if (newImg) {
+        removeImage(product.img);
+        product.img = newImg.filename;
+      }
+
+      await product.save();
+      res.status(200).json({
+        message: `Product with id ${req.params.id} has been edited`,
+        product,
+      });
+    } else {
+      removeImage(req.file.filename);
+      res.status(400).json({ message: 'Not found...' });
+      console.log(`The product with id: ${req.params.id} does not exist`);
+    }
+  } catch (err) {
+    removeImage(req.file.filename);
+    res.status(500).json({ message: err.message });
+    console.log(err.message);
+  }
+};
+
 exports.delete = async (req, res) => {
   try {
     const product = await Products.findById(req.params.id);
