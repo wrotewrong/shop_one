@@ -7,3 +7,8 @@ exports.PRODUCT_AMOUNT_MAX = 10000;
 exports.PRODUCT_DESCRIPTION_MIN_LENGTH = 20;
 exports.PRODUCT_DESCRIPTION_MAX_LENGTH = 1000;
 exports.PRODUCT_IMAGE_MAX_SIZE = 1000000;
+exports.PRODUCT_IMAGE_VALID_EXTENSIONS = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+];
