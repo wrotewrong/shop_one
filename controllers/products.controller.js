@@ -82,6 +82,7 @@ exports.edit = async (req, res) => {
     const product = await Products.findById(req.params.id);
     const { name, price, amount, description } = req.body;
     const newImg = req.file;
+    const newImgType = newImg ? await findImageType(newImg) : 'unknown';
 
     if (product) {
       product.name = name || product.name;
@@ -89,17 +90,23 @@ exports.edit = async (req, res) => {
       product.amount = amount || product.amount;
       product.description = description || product.description;
       if (newImg) {
-        removeImage(product.img);
-        product.img = newImg.filename;
+        if (PRODUCT_IMAGE_VALID_EXTENSIONS.includes(newImgType)) {
+          removeImage(product.img);
+          product.img = newImg.filename;
+        } else {
+          removeImage(newImg.filename);
+          res.status(400).json({ message: 'Bad request' });
+          console.log('Invalid file format');
+          return;
+        }
       }
-
       await product.save();
       res.status(200).json({
         message: `Product with id ${req.params.id} has been edited`,
         product,
       });
     } else {
-      removeImage(req.file.filename);
+      removeImage(newImg.filename);
       res.status(400).json({ message: 'Not found...' });
       console.log(`The product with id: ${req.params.id} does not exist`);
     }

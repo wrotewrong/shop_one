@@ -1,5 +1,5 @@
 const multer = require('multer');
-const PRODUCT_IMAGE_MAX_SIZE = require('../backendConfig');
+const { PRODUCT_IMAGE_MAX_SIZE } = require('../backendConfig');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
