@@ -64,3 +64,50 @@ describe('CRUD - Create', () => {
     await Product.deleteMany();
   });
 });
+
+describe('CRUD - Update', () => {
+  beforeEach(async () => {
+    const testProduct = new Product({
+      name: 'test',
+      price: 12,
+      amount: 2,
+      description: 'test test test test test test',
+      img: 'avatar.jpg',
+      date: '2024-04-04',
+    });
+    await testProduct.save();
+    const anotherTestProduct = new Product({
+      name: 'test2',
+      price: 22,
+      amount: 22,
+      description: '2test test test test test test',
+      img: 'avatar.jpg',
+      date: '2024-04-04',
+    });
+    await anotherTestProduct.save();
+  });
+
+  it('should update the product with "save" method', async () => {
+    const product = await Product.findOne({ name: 'test2' });
+    product.name = 'updated';
+    await product.save();
+    const updatedProduct = await Product.findOne({ name: 'updated' });
+    expect(updatedProduct.name).to.not.be.null;
+  });
+
+  it('should update the product with "updateOne" method', async () => {
+    await Product.updateOne({ name: 'test2' }, { $set: { price: 1 } });
+    const updatedProduct = await Product.findOne({ name: 'test2' });
+    expect(updatedProduct.price).to.be.equal(1);
+  });
+
+  it('should update the product with "updateMany" method', async () => {
+    await Product.updateMany({}, { $set: { price: 5 } });
+    const updatedProduct = await Product.find({ price: 5 });
+    expect(updatedProduct.length).to.be.equal(2);
+  });
+
+  afterEach(async () => {
+    await Product.deleteMany();
+  });
+});
