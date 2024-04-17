@@ -45,3 +45,22 @@ describe('CRUD - Read', () => {
     await Product.deleteMany();
   });
 });
+
+describe('CRUD - Create', () => {
+  it('should insert new product with "insertOne" method', async () => {
+    const product = new Product({
+      name: 'test2',
+      price: 22,
+      amount: 22,
+      description: '2test test test test test test',
+      img: 'avatar.jpg',
+      date: '2024-04-04',
+    });
+    await product.save();
+    expect(product.isNew).to.be.false;
+  });
+
+  after(async () => {
+    await Product.deleteMany();
+  });
+});
