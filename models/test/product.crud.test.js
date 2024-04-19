@@ -111,3 +111,42 @@ describe('CRUD - Update', () => {
     await Product.deleteMany();
   });
 });
+
+describe('CRUD - Delete', () => {
+  beforeEach(async () => {
+    const testProduct = new Product({
+      name: 'test',
+      price: 12,
+      amount: 2,
+      description: 'test test test test test test',
+      img: 'avatar.jpg',
+      date: '2024-04-04',
+    });
+    await testProduct.save();
+    const anotherTestProduct = new Product({
+      name: 'test2',
+      price: 22,
+      amount: 22,
+      description: '2test test test test test test',
+      img: 'avatar.jpg',
+      date: '2024-04-04',
+    });
+    await anotherTestProduct.save();
+  });
+
+  it('should delete the product with "DeleteOne" method', async () => {
+    await Product.deleteOne({ name: 'test2' });
+    const product = await Product.findOne({ name: 'test2' });
+    expect(product).to.be.null;
+  });
+
+  it('should delete the product with "DeleteMany" method', async () => {
+    await Product.deleteMany();
+    const products = await Product.find();
+    expect(products.length).to.be.equal(0);
+  });
+
+  afterEach(async () => {
+    await Product.deleteMany();
+  });
+});
