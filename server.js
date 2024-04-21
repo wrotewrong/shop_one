@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use(productsRoutes);
 
 const server = app.listen(8001, () => {
-  if (NODE_ENV === 'test') {
+  if (NODE_ENV !== 'test') {
     console.log('server is running...');
   }
 });

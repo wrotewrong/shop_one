@@ -57,7 +57,7 @@ exports.add = async (req, res) => {
         date: formatDate,
       });
       await newProduct.save();
-      res.status(200).json({ message: 'Product has been added', newProduct });
+      res.status(200).json({ message: 'OK', newProduct });
       console.log('Product has been added', newProduct);
     } else {
       if (img) {

@@ -1,7 +1,7 @@
-const Product = require('../../../models/productsModel.js');
+const Product = require('../../models/productsModel.js');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../../../server.js');
+const server = require('../../server.js');
 
 chai.use(chaiHttp);
 
