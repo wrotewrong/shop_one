@@ -10,10 +10,14 @@ exports.getAll = async (req, res) => {
       res
         .status(200)
         .json({ message: 'There are no products in the database' });
-      console.log('There are no products in the database');
+      if (process.env.NODE_ENV !== 'test') {
+        console.log('There are no products in the database');
+      }
     } else {
       res.status(200).json(allProducts);
-      console.log(`Number of products: ${allProducts.length}`);
+      if (process.env.NODE_ENV !== 'test') {
+        console.log(`Number of products: ${allProducts.length}`);
+      }
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -26,10 +30,14 @@ exports.getById = async (req, res) => {
     const productById = await Products.find({ _id: req.params.id });
     if (productById.length === 0) {
       res.status(404).json({ message: `Not found...` });
-      console.log(`The product with id: ${req.params.id} does not exist`);
+      if (process.env.NODE_ENV !== 'test') {
+        console.log(`The product with id: ${req.params.id} does not exist`);
+      }
     } else {
       res.status(200).json(productById[0]);
-      console.log(productById[0]);
+      if (process.env.NODE_ENV !== 'test') {
+        console.log(productById[0]);
+      }
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -58,7 +66,9 @@ exports.add = async (req, res) => {
       });
       await newProduct.save();
       res.status(200).json({ message: 'OK', newProduct });
-      console.log('Product has been added', newProduct);
+      if (process.env.NODE_ENV !== 'test') {
+        console.log('Product has been added', newProduct);
+      }
     } else {
       if (img) {
         removeImage(img.filename);
@@ -66,7 +76,9 @@ exports.add = async (req, res) => {
       res.status(400).json({
         message: `Bad request`,
       });
-      console.log('Invalid file format');
+      if (process.env.NODE_ENV !== 'test') {
+        console.log('Invalid file format');
+      }
     }
   } catch (err) {
     if (req.file) {
