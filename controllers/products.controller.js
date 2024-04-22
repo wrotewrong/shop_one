@@ -108,19 +108,26 @@ exports.edit = async (req, res) => {
         } else {
           removeImage(newImg.filename);
           res.status(400).json({ message: 'Bad request' });
-          console.log('Invalid file format');
+          if (process.env.NODE_ENV !== 'test') {
+            console.log('Invalid file format');
+          }
           return;
         }
       }
       await product.save();
       res.status(200).json({
-        message: `Product with id ${req.params.id} has been edited`,
+        message: `OK`,
         product,
       });
+      if (process.env.NODE_ENV !== 'test') {
+        console.log(`Product with id ${req.params.id} has been edited`);
+      }
     } else {
       removeImage(newImg.filename);
       res.status(400).json({ message: 'Not found...' });
-      console.log(`The product with id: ${req.params.id} does not exist`);
+      if (process.env.NODE_ENV !== 'test') {
+        console.log(`The product with id: ${req.params.id} does not exist`);
+      }
     }
   } catch (err) {
     removeImage(req.file.filename);
