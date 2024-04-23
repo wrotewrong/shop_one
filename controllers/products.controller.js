@@ -141,12 +141,18 @@ exports.delete = async (req, res) => {
     const product = await Products.findById(req.params.id);
     if (!product) {
       res.status(404).json({ message: `Not found...` });
-      console.log(`The product with id: ${req.params.id} does not exist`);
+      if (process.env.NODE_ENV !== 'test') {
+        console.log(`The product with id: ${req.params.id} does not exist`);
+      }
     } else {
-      removeImage(product.img);
+      if (process.env.NODE_ENV !== 'test') {
+        removeImage(product.img);
+      }
       await Products.deleteOne({ _id: req.params.id });
-      res.status(200).json({ message: `The product has been removed` });
-      console.log(`The product with id: ${req.params.id} has been removed`);
+      res.status(200).json({ message: `OK` });
+      if (process.env.NODE_ENV !== 'test') {
+        console.log(`The product with id: ${req.params.id} has been removed`);
+      }
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
