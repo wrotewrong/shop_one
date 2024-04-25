@@ -37,6 +37,30 @@ describe('PUT /products', () => {
     expect(updatedProduct.name).to.be.equal('updated');
   });
 
+  it('wrong /:id should return status 404 and return message "Not found..."', async () => {
+    const res = await request(server)
+      .put('/products/6624327aca894b49e9f99067')
+      .send({
+        name: 'updated',
+      });
+
+    expect(res.status).to.be.equal(404);
+    expect(res.body.message).to.be.equal('Not found...');
+  });
+
+  it('invalid /:id should return status 500 and return error message', async () => {
+    const res = await request(server)
+      .put('/products/6624327aca894b49e9f9906xx')
+      .send({
+        name: 'updated',
+      });
+
+    expect(res.status).to.be.equal(500);
+    expect(res.body.message).to.not.be.equal('Not found...');
+    expect(res.body.message).to.not.be.equal('OK');
+    expect(res.body.message).to.not.be.null;
+  });
+
   after(async () => {
     await Product.deleteMany();
   });

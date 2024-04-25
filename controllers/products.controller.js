@@ -2,6 +2,7 @@ const Products = require('../models/productsModel');
 const removeImage = require('../utils/removeImage');
 const findImageType = require('../utils/findImageType');
 const { PRODUCT_IMAGE_VALID_EXTENSIONS } = require('../backendConfig');
+const logWhenNotTesting = require('../utils/logWhenNotTesting');
 
 exports.getAll = async (req, res) => {
   try {
@@ -10,18 +11,14 @@ exports.getAll = async (req, res) => {
       res
         .status(200)
         .json({ message: 'There are no products in the database' });
-      if (process.env.NODE_ENV !== 'test') {
-        console.log('There are no products in the database');
-      }
+      logWhenNotTesting('There are no products in the database');
     } else {
       res.status(200).json(allProducts);
-      if (process.env.NODE_ENV !== 'test') {
-        console.log(`Number of products: ${allProducts.length}`);
-      }
+      logWhenNotTesting(`Number of products: ${allProducts.length}`);
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
-    console.log(err.message);
+    logWhenNotTesting(err.message);
   }
 };
 
@@ -30,18 +27,14 @@ exports.getById = async (req, res) => {
     const productById = await Products.find({ _id: req.params.id });
     if (productById.length === 0) {
       res.status(404).json({ message: `Not found...` });
-      if (process.env.NODE_ENV !== 'test') {
-        console.log(`The product with id: ${req.params.id} does not exist`);
-      }
+      logWhenNotTesting(`The product with id: ${req.params.id} does not exist`);
     } else {
       res.status(200).json(productById[0]);
-      if (process.env.NODE_ENV !== 'test') {
-        console.log(productById[0]);
-      }
+      logWhenNotTesting(productById[0]);
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
-    console.log(err.message);
+    logWhenNotTesting(err.message);
   }
 };
 
@@ -66,9 +59,7 @@ exports.add = async (req, res) => {
       });
       await newProduct.save();
       res.status(200).json({ message: 'OK', newProduct });
-      if (process.env.NODE_ENV !== 'test') {
-        console.log('Product has been added', newProduct);
-      }
+      logWhenNotTesting('Product has been added', newProduct);
     } else {
       if (img) {
         removeImage(img.filename);
@@ -76,16 +67,14 @@ exports.add = async (req, res) => {
       res.status(400).json({
         message: `Bad request`,
       });
-      if (process.env.NODE_ENV !== 'test') {
-        console.log('Invalid file format');
-      }
+      logWhenNotTesting('Invalid file format');
     }
   } catch (err) {
     if (req.file) {
       removeImage(req.file.filename);
     }
     res.status(500).json({ message: err.message });
-    console.log(err.message);
+    logWhenNotTesting(err.message);
   }
 };
 
@@ -108,9 +97,7 @@ exports.edit = async (req, res) => {
         } else {
           removeImage(newImg.filename);
           res.status(400).json({ message: 'Bad request' });
-          if (process.env.NODE_ENV !== 'test') {
-            console.log('Invalid file format');
-          }
+          logWhenNotTesting('Invalid file format');
           return;
         }
       }
@@ -119,20 +106,20 @@ exports.edit = async (req, res) => {
         message: `OK`,
         product,
       });
-      if (process.env.NODE_ENV !== 'test') {
-        console.log(`Product with id ${req.params.id} has been edited`);
-      }
+      logWhenNotTesting(`Product with id ${req.params.id} has been edited`);
     } else {
-      removeImage(newImg.filename);
-      res.status(400).json({ message: 'Not found...' });
       if (process.env.NODE_ENV !== 'test') {
-        console.log(`The product with id: ${req.params.id} does not exist`);
+        removeImage(newImg.filename);
       }
+      res.status(404).json({ message: 'Not found...' });
+      logWhenNotTesting(`The product with id: ${req.params.id} does not exist`);
     }
   } catch (err) {
-    removeImage(req.file.filename);
+    if (process.env.NODE_ENV !== 'test') {
+      removeImage(req.file.filename);
+    }
     res.status(500).json({ message: err.message });
-    console.log(err.message);
+    logWhenNotTesting(err.message);
   }
 };
 
@@ -141,21 +128,19 @@ exports.delete = async (req, res) => {
     const product = await Products.findById(req.params.id);
     if (!product) {
       res.status(404).json({ message: `Not found...` });
-      if (process.env.NODE_ENV !== 'test') {
-        console.log(`The product with id: ${req.params.id} does not exist`);
-      }
+      logWhenNotTesting(`The product with id: ${req.params.id} does not exist`);
     } else {
       if (process.env.NODE_ENV !== 'test') {
         removeImage(product.img);
       }
       await Products.deleteOne({ _id: req.params.id });
       res.status(200).json({ message: `OK` });
-      if (process.env.NODE_ENV !== 'test') {
-        console.log(`The product with id: ${req.params.id} has been removed`);
-      }
+      logWhenNotTesting(
+        `The product with id: ${req.params.id} has been removed`
+      );
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
-    console.log(err.message);
+    logWhenNotTesting(err.message);
   }
 };
