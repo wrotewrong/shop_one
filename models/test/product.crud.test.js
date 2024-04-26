@@ -149,4 +149,8 @@ describe('CRUD - Delete', () => {
   afterEach(async () => {
     await Product.deleteMany();
   });
+
+  after(() => {
+    mongoose.models = {};
+  });
 });
