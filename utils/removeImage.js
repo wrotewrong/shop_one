@@ -1,17 +1,15 @@
-const fs = require('fs');
+const fs = require('fs/promises');
 const path = require('path');
 
-const removeImage = (img) => {
+const removeImage = async (img) => {
   const rootPath = path.join(__dirname, '..');
   const fullPath = rootPath + '/public/uploads/' + img;
 
-  fs.stat(fullPath, (err) => {
-    if (err) {
-      console.error('Error checking file status:', err);
-      return;
-    }
-    fs.unlinkSync(fullPath);
-  });
+  try {
+    await fs.unlink(fullPath);
+  } catch (err) {
+    console.error('Error deleting file:', err);
+  }
 };
 
 module.exports = removeImage;
