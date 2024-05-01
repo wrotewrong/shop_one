@@ -9,7 +9,7 @@ const {
   PRODUCT_AMOUNT_MAX,
   PRODUCT_DESCRIPTION_MIN_LENGTH,
   PRODUCT_DESCRIPTION_MAX_LENGTH,
-} = require('../../backendConfig');
+} = require('../../config/backendConfig');
 
 describe('Product model', () => {
   it('should throw an error if at least one argument is not provided', async () => {

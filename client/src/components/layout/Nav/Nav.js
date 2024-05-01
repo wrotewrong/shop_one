@@ -17,7 +17,7 @@ const Nav = () => {
           <NavLink to={'/cart'}>Cart</NavLink>
         </li>
         <li>
-          <NavLink to={'/login'}>Login</NavLink>
+          <a href='/auth/google'>login</a>
         </li>
       </ul>
     </div>

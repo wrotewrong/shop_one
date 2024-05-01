@@ -8,7 +8,7 @@ const {
   PRODUCT_AMOUNT_MAX,
   PRODUCT_DESCRIPTION_MIN_LENGTH,
   PRODUCT_DESCRIPTION_MAX_LENGTH,
-} = require('../backendConfig');
+} = require('../config/backendConfig');
 
 const productsSchema = new mongoose.Schema({
   name: {

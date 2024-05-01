@@ -1,7 +1,7 @@
 const Products = require('../models/productsModel');
 const removeImage = require('../utils/removeImage');
 const findImageType = require('../utils/findImageType');
-const { PRODUCT_IMAGE_VALID_EXTENSIONS } = require('../backendConfig');
+const { PRODUCT_IMAGE_VALID_EXTENSIONS } = require('../config/backendConfig');
 const logWhenNotTesting = require('../utils/logWhenNotTesting');
 
 exports.getAll = async (req, res) => {
