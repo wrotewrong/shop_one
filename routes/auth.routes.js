@@ -11,7 +11,7 @@ router.get(
   '/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/user/no-permission' }),
   (req, res) => {
-    res.redirect('/');
+    res.redirect('/user/logged');
   }
 );
 

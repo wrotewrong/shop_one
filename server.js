@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const productsRoutes = require('./routes/products.routes');
 const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/users.routes');
 const cors = require('cors');
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -58,6 +59,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 app.use(productsRoutes);
 app.use(authRoutes);
+app.use(userRoutes);
 
 const server = app.listen(8000, () => {
   if (NODE_ENV !== 'test') {
