@@ -1,4 +1,5 @@
 const Products = require('../models/productsModel');
+const Users = require('../models/usersModel');
 const removeImage = require('../utils/removeImage');
 const findImageType = require('../utils/findImageType');
 const { PRODUCT_IMAGE_VALID_EXTENSIONS } = require('../config/backendConfig');
@@ -6,7 +7,12 @@ const logWhenNotTesting = require('../utils/logWhenNotTesting');
 
 exports.getAll = async (req, res) => {
   try {
-    const allProducts = await Products.find();
+    const allProducts = await Products.find().populate({
+      path: 'user',
+      select: ['-authProviderId', '-email'],
+    });
+
+    // const allProducts = await Products.find();
     if (allProducts.length === 0) {
       res
         .status(200)
@@ -56,6 +62,10 @@ exports.add = async (req, res) => {
         amount,
         img: img.filename,
         date: formatDate,
+        user: await Users.findOne({ authProviderId: req.user.id }).select([
+          '-authProviderId',
+          '-email',
+        ]),
       });
       await newProduct.save();
       res.status(200).json({ message: 'OK', newProduct });

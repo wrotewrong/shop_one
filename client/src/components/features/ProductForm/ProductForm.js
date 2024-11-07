@@ -1,8 +1,8 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
-import { addProduct } from '../../../redux/productsSlice';
 import { useDispatch } from 'react-redux';
+import { addProducts } from '../../../redux/productsSlice';
 
 const ProductForm = () => {
   const [name, setName] = useState();
@@ -14,7 +14,7 @@ const ProductForm = () => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    dispatch(addProduct({ name, price, amount, description, file }));
+    dispatch(addProducts({ name, price, amount, description, file }));
     console.log({ name, price, amount, description, file });
   };
 

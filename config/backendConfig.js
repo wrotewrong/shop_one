@@ -12,3 +12,5 @@ exports.PRODUCT_IMAGE_VALID_EXTENSIONS = [
   'image/png',
   'image/gif',
 ];
+
+//built in node 16.20.1

@@ -37,6 +37,7 @@ const productsSchema = new mongoose.Schema({
   },
   img: { type: String, required: true },
   date: { type: String, required: true },
+  user: { type: String, required: true, ref: 'Users' },
 });
 
 module.exports = mongoose.model('Products', productsSchema);
