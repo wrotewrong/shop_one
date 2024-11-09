@@ -2,28 +2,26 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { API_URL } from '../config';
 
 const initialState = {
-  products: [
-    {
-      id: '1',
-      name: 'black thsirt',
-      price: '199',
-      description: 'ipsum',
-      amount: 5,
-      img: '',
-    },
-    {
-      id: '2',
-      name: 'blue jeans',
-      price: '299',
-      description: 'lorem',
-      amount: 10,
-      img: '',
-    },
-  ],
-  status: null,
+  products: [],
+  status: 'idle',
   message: null,
   error: null,
 };
+
+export const getProducts = createAsyncThunk(
+  'products/getProducts',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`${API_URL}/products`, { method: 'GET' });
+      if (!res.ok) {
+        throw new Error(`Failed to get products: ${res.statusText}`);
+      }
+      return await res.json();
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 export const addProducts = createAsyncThunk(
   'products/addProducts',
@@ -57,7 +55,6 @@ const productsSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
-    getProduct: (state) => {},
     editProduct: (state) => {},
     removeProduct: (state, action) => {
       return state.filter((product) => product.id !== action.payload);
@@ -65,6 +62,19 @@ const productsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getProducts.pending, (state, action) => {
+        state.status = 'loading';
+        state.error = null;
+        state.message = null;
+      })
+      .addCase(getProducts.fulfilled, (state, action) => {
+        state.products = action.payload;
+        state.status = 'succeeded';
+      })
+      .addCase(getProducts.rejected, (state, action) => {
+        state.error = action.payload || action.error.message;
+        state.status = 'failed';
+      })
       .addCase(addProducts.pending, (state, action) => {
         state.status = 'loading';
         state.error = null;
@@ -74,13 +84,7 @@ const productsSlice = createSlice({
         const { message, newProduct } = action.payload;
         if (newProduct) {
           state.products.push({
-            id: newProduct._id,
-            name: newProduct.name,
-            price: newProduct.price,
-            amount: newProduct.amount,
-            description: newProduct.description,
-            file: newProduct.file,
-            user: newProduct.user,
+            ...newProduct,
           });
         }
         state.message = message;
