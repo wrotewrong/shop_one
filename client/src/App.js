@@ -1,4 +1,4 @@
-// import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 // import { addProduct, removeProduct } from './redux/productsSlice';
 import Nav from './components/layout/Nav/Nav';
 // import Main from './components/layout/Main/Main';
@@ -12,12 +12,20 @@ import Products from './components/pages/Products/Products';
 import SingleProduct from './components/pages/SingleProduct/SingleProduct';
 import AddProduct from './components/pages/AddProduct/AddProduct';
 // import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { getProducts } from './redux/productsSlice';
 
 function App() {
   // const products = useSelector((state) => state.products);
   // const dispatch = useDispatch();
 
   // const { productId } = useParams();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
 
   return (
     <div>

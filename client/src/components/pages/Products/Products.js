@@ -1,16 +1,8 @@
-import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { getProducts } from '../../../redux/productsSlice';
 
 const Products = () => {
   const products = useSelector((state) => state.products.products);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
 
   return (
     <div>
@@ -22,7 +14,7 @@ const Products = () => {
               <div>{product.price}</div>
               <div>{product.description}</div>
               <button>
-                <Link to={`/products/${product.id}`}>Details</Link>
+                <Link to={`/products/${product._id}`}>Details</Link>
               </button>
             </div>
           );

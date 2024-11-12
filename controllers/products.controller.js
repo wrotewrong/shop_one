@@ -12,7 +12,6 @@ exports.getAll = async (req, res) => {
       select: ['-authProviderId', '-email'],
     });
 
-    // const allProducts = await Products.find();
     if (allProducts.length === 0) {
       res
         .status(200)
@@ -30,7 +29,10 @@ exports.getAll = async (req, res) => {
 
 exports.getById = async (req, res) => {
   try {
-    const productById = await Products.find({ _id: req.params.id });
+    const productById = await Products.find({ _id: req.params.id }).populate({
+      path: 'user',
+      select: ['-authProviderId', '-email'],
+    });
     if (productById.length === 0) {
       res.status(404).json({ message: `Not found...` });
       logWhenNotTesting(`The product with id: ${req.params.id} does not exist`);
