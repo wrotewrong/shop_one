@@ -8,12 +8,14 @@ import Home from './components/pages/Home/Home';
 import NotFound from './components/pages/NotFound/NotFound';
 import Cart from './components/pages/Cart/Cart';
 import Products from './components/pages/Products/Products';
-// import Login from './components/pages/Login/Login';
+import Login from './components/pages/Login/Login';
 import SingleProduct from './components/pages/SingleProduct/SingleProduct';
 import AddProduct from './components/pages/AddProduct/AddProduct';
 // import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getProducts } from './redux/productsSlice';
+import UserLogged from './components/pages/UserLogged/UserLogged';
+import NotAuthorized from './components/pages/NotAuthorized/NotAuthorized';
 
 function App() {
   // const products = useSelector((state) => state.products);
@@ -55,7 +57,9 @@ function App() {
         <Route path='/products/:productId' element={<SingleProduct />}></Route>
         <Route path='/cart' element={<Cart />}></Route>
         <Route path='/add' element={<AddProduct />}></Route>
-        {/* <Route path='/login' element={<Login />}></Route> */}
+        <Route path='/login' element={<Login />}></Route>
+        <Route path='/user/logged' element={<UserLogged />}></Route>
+        <Route path='/user/no-permission' element={<NotAuthorized />}></Route>
         <Route path='*' element={<NotFound />}></Route>
       </Routes>
       <Footer></Footer>
