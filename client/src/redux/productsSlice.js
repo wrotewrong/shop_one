@@ -51,6 +51,26 @@ export const addProducts = createAsyncThunk(
   }
 );
 
+export const deleteProducts = createAsyncThunk(
+  'products/deleteProducts',
+  async (productId, { rejectWithValue }) => {
+    const options = {
+      method: 'DELETE',
+      credentials: 'include',
+    };
+
+    try {
+      const res = await fetch(`${API_URL}/products/${productId}`, options);
+      if (!res.ok) {
+        throw new Error(`Failed to delete product: ${res.statusText}`);
+      }
+      return await res.json();
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const productsSlice = createSlice({
   name: 'products',
   initialState,
@@ -91,6 +111,26 @@ const productsSlice = createSlice({
         state.status = 'succeeded';
       })
       .addCase(addProducts.rejected, (state, action) => {
+        state.error = action.payload || action.error.message;
+        state.status = 'failed';
+      })
+      .addCase(deleteProducts.pending, (state, action) => {
+        state.status = 'loading';
+        state.error = null;
+        state.message = null;
+      })
+      .addCase(deleteProducts.fulfilled, (state, action) => {
+        const { message, deletedProduct } = action.payload;
+        if (deletedProduct) {
+          const index = state.products.findIndex(
+            (product) => product._id === deletedProduct._id
+          );
+          state.products.splice(index, 1);
+        }
+        state.message = message;
+        state.status = 'succeeded';
+      })
+      .addCase(deleteProducts.rejected, (state, action) => {
         state.error = action.payload || action.error.message;
         state.status = 'failed';
       });

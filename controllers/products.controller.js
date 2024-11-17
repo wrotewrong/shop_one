@@ -137,16 +137,16 @@ exports.edit = async (req, res) => {
 
 exports.delete = async (req, res) => {
   try {
-    const product = await Products.findById(req.params.id);
-    if (!product) {
+    const deletedProduct = await Products.findById(req.params.id);
+    if (!deletedProduct) {
       res.status(404).json({ message: `Not found...` });
       logWhenNotTesting(`The product with id: ${req.params.id} does not exist`);
     } else {
       if (process.env.NODE_ENV !== 'test') {
-        removeImage(product.img);
+        removeImage(deletedProduct.img);
       }
       await Products.deleteOne({ _id: req.params.id });
-      res.status(200).json({ message: `OK` });
+      res.status(200).json({ message: `OK`, deletedProduct });
       logWhenNotTesting(
         `The product with id: ${req.params.id} has been removed`
       );
