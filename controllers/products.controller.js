@@ -142,14 +142,28 @@ exports.delete = async (req, res) => {
       res.status(404).json({ message: `Not found...` });
       logWhenNotTesting(`The product with id: ${req.params.id} does not exist`);
     } else {
-      if (process.env.NODE_ENV !== 'test') {
-        removeImage(deletedProduct.img);
+      const user = await Users.findOne({
+        authProviderId: req.session.passport?.user?.id,
+      });
+      if (!user) {
+        res.status(404).json({ message: 'User not found' });
+        logWhenNotTesting(`User not found`);
       }
-      await Products.deleteOne({ _id: req.params.id });
-      res.status(200).json({ message: `OK`, deletedProduct });
-      logWhenNotTesting(
-        `The product with id: ${req.params.id} has been removed`
-      );
+      if (!user._id.equals(deletedProduct.user._id)) {
+        logWhenNotTesting(
+          `You are not authorized to delete product with id: ${deletedProduct._id}`
+        );
+        res.status(403).json({ message: 'You can only delete your own ads' });
+      } else {
+        if (process.env.NODE_ENV !== 'test') {
+          removeImage(deletedProduct.img);
+        }
+        await Products.deleteOne({ _id: req.params.id });
+        res.status(200).json({ message: `OK`, deletedProduct });
+        logWhenNotTesting(
+          `The product with id: ${req.params.id} has been removed`
+        );
+      }
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
