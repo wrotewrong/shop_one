@@ -4,17 +4,22 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addProducts } from '../../../redux/productsSlice';
 
-const ProductForm = () => {
-  const [name, setName] = useState();
-  const [price, setPrice] = useState();
-  const [amount, setAmount] = useState();
-  const [description, setDescription] = useState();
-  const [file, setFile] = useState();
+const ProductForm = (props) => {
+  const [name, setName] = useState(props.name || '');
+  const [price, setPrice] = useState(props.price || '');
+  const [amount, setAmount] = useState(props.amount || '');
+  const [description, setDescription] = useState(props.description || '');
+  const [file, setFile] = useState(props.img || null);
   const dispatch = useDispatch();
+  const { action } = props;
 
   const submitForm = (e) => {
     e.preventDefault();
-    dispatch(addProducts({ name, price, amount, description, file }));
+    if (action === 'add') {
+      dispatch(addProducts({ name, price, amount, description, file }));
+    } else {
+      console.log('edited');
+    }
     console.log({ name, price, amount, description, file });
   };
 
@@ -26,6 +31,7 @@ const ProductForm = () => {
           <Form.Label>Name</Form.Label>
           <Form.Control
             type='text'
+            value={name}
             onChange={(e) => setName(e.target.value)}
           ></Form.Control>
         </Form.Group>
@@ -33,6 +39,7 @@ const ProductForm = () => {
           <Form.Label>Price</Form.Label>
           <Form.Control
             type='number'
+            value={price}
             onChange={(e) => setPrice(e.target.value)}
           ></Form.Control>
         </Form.Group>
@@ -40,14 +47,16 @@ const ProductForm = () => {
           <Form.Label>Amount</Form.Label>
           <Form.Control
             type='number'
+            value={amount}
             onChange={(e) => setAmount(e.target.value)}
           ></Form.Control>
         </Form.Group>
         <Form.Group controlId='formGroupDescription'>
           <Form.Label>Description</Form.Label>
           <Form.Control
-            name='uploaded_file'
+            // name='uploaded_file'
             as='textarea'
+            value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></Form.Control>
         </Form.Group>
@@ -59,7 +68,9 @@ const ProductForm = () => {
             //   accept='image/jpeg'
           ></Form.Control>
         </Form.Group>
-        <Button type='=submit'>Add Product</Button>
+        <Button type='=submit'>
+          {action === 'add' ? 'Add' : 'Edit'} product
+        </Button>
       </Form>
     </div>
   );

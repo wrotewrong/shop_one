@@ -143,7 +143,7 @@ exports.delete = async (req, res) => {
       logWhenNotTesting(`The product with id: ${req.params.id} does not exist`);
     } else {
       const user = await Users.findOne({
-        authProviderId: req.session.passport?.user?.id,
+        authProviderId: req.session?.passport?.user?.id,
       });
       if (!user) {
         res.status(404).json({ message: 'User not found' });

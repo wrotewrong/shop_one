@@ -3,6 +3,7 @@ import { API_URL } from '../config';
 
 const initialState = {
   products: [],
+  singleProduct: null,
   status: 'idle',
   message: null,
   error: null,
@@ -15,6 +16,23 @@ export const getProducts = createAsyncThunk(
       const res = await fetch(`${API_URL}/products`, { method: 'GET' });
       if (!res.ok) {
         throw new Error(`Failed to get products: ${res.statusText}`);
+      }
+      return await res.json();
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getProductById = createAsyncThunk(
+  'products/getProductById',
+  async (productId, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`${API_URL}/products/${productId}`, {
+        method: 'GET',
+      });
+      if (!res.ok) {
+        throw new Error(`Failed to get product by id: ${res.statusText}`);
       }
       return await res.json();
     } catch (error) {
@@ -92,6 +110,19 @@ const productsSlice = createSlice({
         state.status = 'succeeded';
       })
       .addCase(getProducts.rejected, (state, action) => {
+        state.error = action.payload || action.error.message;
+        state.status = 'failed';
+      })
+      .addCase(getProductById.pending, (state, action) => {
+        state.status = 'loading';
+        state.error = null;
+        state.message = null;
+      })
+      .addCase(getProductById.fulfilled, (state, action) => {
+        state.singleProduct = action.payload;
+        state.status = 'succeeded';
+      })
+      .addCase(getProductById.rejected, (state, action) => {
         state.error = action.payload || action.error.message;
         state.status = 'failed';
       })

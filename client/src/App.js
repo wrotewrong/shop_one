@@ -16,6 +16,7 @@ import { useEffect } from 'react';
 import { getProducts } from './redux/productsSlice';
 import UserLogged from './components/pages/UserLogged/UserLogged';
 import NotAuthorized from './components/pages/NotAuthorized/NotAuthorized';
+import EditProduct from './components/pages/EditProduct/EditProduct';
 
 function App() {
   // const products = useSelector((state) => state.products);
@@ -55,6 +56,10 @@ function App() {
         <Route path='/' element={<Home />}></Route>
         <Route path='/products' element={<Products />}></Route>
         <Route path='/products/:productId' element={<SingleProduct />}></Route>
+        <Route
+          path='/products/:productId/edit'
+          element={<EditProduct />}
+        ></Route>
         <Route path='/cart' element={<Cart />}></Route>
         <Route path='/add' element={<AddProduct />}></Route>
         <Route path='/login' element={<Login />}></Route>

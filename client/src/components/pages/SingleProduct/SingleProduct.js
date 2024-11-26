@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, NavLink } from 'react-router-dom';
 import { deleteProducts } from '../../../redux/productsSlice';
 
 const SingleProduct = () => {
@@ -21,7 +21,9 @@ const SingleProduct = () => {
       <div>{selectedProduct?.name}</div>
       <div>{selectedProduct?.price}</div>
       <div>{selectedProduct?.description}</div>
-      <button>Edit</button>
+      <button>
+        <NavLink to={`/products/${productId}/edit`}>Edit</NavLink>
+      </button>
       <button onClick={handleDelete}>Delete</button>
     </div>
   );
