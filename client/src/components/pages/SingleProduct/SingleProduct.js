@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
-import { deleteProducts } from '../../../redux/productsSlice';
+import { deleteProducts, getProductById } from '../../../redux/productsSlice';
+import { useEffect } from 'react';
 
 const SingleProduct = () => {
   const dispatch = useDispatch();
@@ -14,6 +15,10 @@ const SingleProduct = () => {
     dispatch(deleteProducts(selectedProduct?._id));
     navigate('/products');
   };
+
+  useEffect(() => {
+    dispatch(getProductById(productId));
+  }, [dispatch, productId]);
 
   return (
     <div>

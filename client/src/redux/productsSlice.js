@@ -69,6 +69,35 @@ export const addProducts = createAsyncThunk(
   }
 );
 
+export const editProducts = createAsyncThunk(
+  'products/editProducts',
+  async (product, { rejectWithValue }) => {
+    console.log(product);
+    const fd = new FormData();
+    fd.append('name', product.name);
+    fd.append('price', product.price);
+    fd.append('amount', product.amount);
+    fd.append('description', product.description);
+    fd.append('uploaded_file', product.file);
+
+    const options = {
+      method: 'PUT',
+      credentials: 'include',
+      body: fd,
+    };
+
+    try {
+      const res = await fetch(`${API_URL}/products/${product.id}`, options);
+      if (!res.ok) {
+        throw new Error(`Failed to edit product: ${res.statusText}`);
+      }
+      return await res.json();
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const deleteProducts = createAsyncThunk(
   'products/deleteProducts',
   async (productId, { rejectWithValue }) => {
@@ -142,6 +171,27 @@ const productsSlice = createSlice({
         state.status = 'succeeded';
       })
       .addCase(addProducts.rejected, (state, action) => {
+        state.error = action.payload || action.error.message;
+        state.status = 'failed';
+      })
+      .addCase(editProducts.pending, (state, action) => {
+        state.status = 'loading';
+        state.error = null;
+        state.message = null;
+      })
+      .addCase(editProducts.fulfilled, (state, action) => {
+        const { message, editedProduct } = action.payload;
+        if (editedProduct) {
+          const index = state.products.findIndex(
+            (product) => product._id === editedProduct._id
+          );
+
+          state.products.splice(index, 1, editedProduct);
+        }
+        state.message = message;
+        state.status = 'succeeded';
+      })
+      .addCase(editProducts.rejected, (state, action) => {
         state.error = action.payload || action.error.message;
         state.status = 'failed';
       })

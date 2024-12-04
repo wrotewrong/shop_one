@@ -2,7 +2,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addProducts } from '../../../redux/productsSlice';
+import { addProducts, editProducts } from '../../../redux/productsSlice';
 
 const ProductForm = (props) => {
   const [name, setName] = useState(props.name || '');
@@ -19,6 +19,9 @@ const ProductForm = (props) => {
       dispatch(addProducts({ name, price, amount, description, file }));
     } else {
       console.log('edited');
+      dispatch(
+        editProducts({ id: props._id, name, price, amount, description, file })
+      );
     }
     console.log({ name, price, amount, description, file });
   };

@@ -92,33 +92,49 @@ exports.add = async (req, res) => {
 
 exports.edit = async (req, res) => {
   try {
-    const product = await Products.findById(req.params.id);
+    const editedProduct = await Products.findById(req.params.id).populate({
+      path: 'user',
+      select: '-email',
+    });
+    const currentUser = req.session.passport.user.id;
+    const ownerUser = editedProduct.user.authProviderId;
     const { name, price, amount, description } = req.body;
     const newImg = req.file;
     const newImgType = newImg ? await findImageType(newImg) : 'unknown';
 
-    if (product) {
-      product.name = name || product.name;
-      product.price = price || product.price;
-      product.amount = amount || product.amount;
-      product.description = description || product.description;
-      if (newImg) {
-        if (PRODUCT_IMAGE_VALID_EXTENSIONS.includes(newImgType)) {
-          removeImage(product.img);
-          product.img = newImg.filename;
-        } else {
+    if (editedProduct) {
+      if (currentUser !== ownerUser) {
+        if (newImg) {
           removeImage(newImg.filename);
-          res.status(400).json({ message: 'Bad request' });
-          logWhenNotTesting('Invalid file format');
-          return;
         }
+        logWhenNotTesting(
+          `You are not permitted to edit product with id: ${editedProduct._id}`
+        );
+        res.status(403).json({ message: 'You can only edit your own ads' });
+        return;
+      } else {
+        editedProduct.name = name || editedProduct.name;
+        editedProduct.price = price || editedProduct.price;
+        editedProduct.amount = amount || editedProduct.amount;
+        editedProduct.description = description || editedProduct.description;
+        if (newImg) {
+          if (PRODUCT_IMAGE_VALID_EXTENSIONS.includes(newImgType)) {
+            removeImage(editedProduct.img);
+            editedProduct.img = newImg.filename;
+          } else {
+            removeImage(newImg.filename);
+            res.status(400).json({ message: 'Bad request' });
+            logWhenNotTesting('Invalid file format');
+            return;
+          }
+        }
+        await editedProduct.save();
+        res.status(200).json({
+          message: `OK`,
+          editedProduct,
+        });
+        logWhenNotTesting(`Product with id ${req.params.id} has been edited`);
       }
-      await product.save();
-      res.status(200).json({
-        message: `OK`,
-        product,
-      });
-      logWhenNotTesting(`Product with id ${req.params.id} has been edited`);
     } else {
       if (process.env.NODE_ENV !== 'test') {
         removeImage(newImg.filename);
