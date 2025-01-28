@@ -6,8 +6,8 @@ const Products = () => {
 
   return (
     <div>
-      <div>
-        {products.map((product) => {
+      {products.length>0? <div>
+        { products.map((product) => {
           return (
             <div key={product._id}>
               <div>{product.name}</div>
@@ -19,7 +19,7 @@ const Products = () => {
             </div>
           );
         })}
-      </div>
+      </div>: <p>There are no products in the database</p>}
     </div>
   );
 };

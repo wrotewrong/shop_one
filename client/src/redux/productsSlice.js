@@ -162,7 +162,7 @@ const productsSlice = createSlice({
       })
       .addCase(addProducts.fulfilled, (state, action) => {
         const { message, newProduct } = action.payload;
-        if (newProduct) {
+        if (newProduct && state.products.length>0) {
           state.products.push({
             ...newProduct,
           });
