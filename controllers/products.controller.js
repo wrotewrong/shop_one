@@ -12,15 +12,8 @@ exports.getAll = async (req, res) => {
       select: ['-authProviderId', '-email'],
     });
 
-    if (allProducts.length === 0) {
-      res
-        .status(200)
-        .json({ message: 'There are no products in the database' });
-      logWhenNotTesting('There are no products in the database');
-    } else {
-      res.status(200).json(allProducts);
-      logWhenNotTesting(`Number of products: ${allProducts.length}`);
-    }
+    res.status(200).json(allProducts);
+    logWhenNotTesting(`Number of products: ${allProducts.length}`);
   } catch (err) {
     res.status(500).json({ message: err.message });
     logWhenNotTesting(err.message);
