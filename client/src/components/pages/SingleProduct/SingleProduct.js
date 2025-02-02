@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
 import { deleteProducts, getProductById } from '../../../redux/productsSlice';
 import { useEffect } from 'react';
+import ProductAmount from '../../features/ProductAmount/ProductAmount';
 
 const SingleProduct = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,7 @@ const SingleProduct = () => {
       <div>{selectedProduct?.name}</div>
       <div>{selectedProduct?.price}</div>
       <div>{selectedProduct?.description}</div>
+      <ProductAmount>{selectedProduct}</ProductAmount>
       <button>
         <NavLink to={`/products/${productId}/edit`}>Edit</NavLink>
       </button>
