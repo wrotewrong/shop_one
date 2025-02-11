@@ -1,35 +1,39 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import ProductAmount from '../../features/ProductAmount/ProductAmount';
+import { removeFromCart, clearCart } from '../../../redux/cartSlice';
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart.cart);
+  const dispatch = useDispatch();
 
   const handleClear = () => {
-    console.log('clear');
+    dispatch(clearCart());
   };
 
-  const handleRemove = () => {
-    console.log('remove');
+  const handleRemove = (id) => {
+    dispatch(removeFromCart(id));
   };
 
   return cart.length === 0 ? (
-    <div>xd</div>
+    <div>The cart is empty</div>
   ) : (
     <div>
       {cart.map((cartProduct) => {
         return (
           <div key={cartProduct._id}>
             <div>{cartProduct.name}</div>
-            <div>{cartProduct.amount}</div>
-            <div>{cartProduct.price * cartProduct.amount}</div>
+            <div>amount: {cartProduct.amount}</div>
+            <div>price: {cartProduct.price * cartProduct.amount}</div>
             <ProductAmount>{cartProduct}</ProductAmount>
-            <button onClick={handleRemove}>remove</button>
+            <button onClick={() => handleRemove(cartProduct._id)}>
+              remove
+            </button>
           </div>
         );
       })}
-      <div>{`Total price:${cart.reduce(
-        (a, b) => a.amount * a.price + b.amount * b.price
-      )}`}</div>
+      <div>{`Total price:${cart.reduce((a, b) => {
+        return a + b.amount * b.price;
+      }, 0)}`}</div>
       <button onClick={handleClear}>clear the cart</button>
     </div>
   );
