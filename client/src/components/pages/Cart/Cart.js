@@ -14,7 +14,7 @@ const Cart = () => {
     dispatch(removeFromCart(id));
   };
 
-  return cart.length === 0 ? (
+  return cart?.length === 0 ? (
     <div>The cart is empty</div>
   ) : (
     <div>
