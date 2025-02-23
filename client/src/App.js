@@ -7,6 +7,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './components/pages/Home/Home';
 import NotFound from './components/pages/NotFound/NotFound';
 import Cart from './components/pages/Cart/Cart';
+import Checkout from './components/pages/Checkout/Checkout';
 import Products from './components/pages/Products/Products';
 import Login from './components/pages/Login/Login';
 import SingleProduct from './components/pages/SingleProduct/SingleProduct';
@@ -61,6 +62,7 @@ function App() {
           element={<EditProduct />}
         ></Route>
         <Route path='/cart' element={<Cart />}></Route>
+        <Route path='/checkout' element={<Checkout />}></Route>
         <Route path='/add' element={<AddProduct />}></Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/user/logged' element={<UserLogged />}></Route>
