@@ -10,7 +10,7 @@ const {
   PRODUCT_DESCRIPTION_MAX_LENGTH,
 } = require('../config/backendConfig');
 
-const productsSchema = new mongoose.Schema({
+const productsModel = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -40,4 +40,4 @@ const productsSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Users' },
 });
 
-module.exports = mongoose.model('Products', productsSchema);
+module.exports = mongoose.model('Products', productsModel);
